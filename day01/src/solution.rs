@@ -22,33 +22,33 @@ pub fn solve_part_one<'a>(input: impl Iterator<Item = &'a str>) -> String {
     sum.to_string()
 }
 
-pub fn solve_part_two<'a>(input: impl Iterator<Item = &'a str>) -> String {
-    let numbers_map: HashMap<&str, u32> = HashMap::from([
-        ("1", 1),
-        ("2", 2),
-        ("3", 3),
-        ("4", 4),
-        ("5", 5),
-        ("6", 6),
-        ("7", 7),
-        ("8", 8),
-        ("9", 9),
-        ("one", 1),
-        ("two", 2),
-        ("three", 3),
-        ("four", 4),
-        ("five", 5),
-        ("six", 6),
-        ("seven", 7),
-        ("eight", 8),
-        ("nine", 9),
-    ]);
+const NUMBERS_MAP: [(&str, u32); 18] = [
+    ("1", 1),
+    ("2", 2),
+    ("3", 3),
+    ("4", 4),
+    ("5", 5),
+    ("6", 6),
+    ("7", 7),
+    ("8", 8),
+    ("9", 9),
+    ("one", 1),
+    ("two", 2),
+    ("three", 3),
+    ("four", 4),
+    ("five", 5),
+    ("six", 6),
+    ("seven", 7),
+    ("eight", 8),
+    ("nine", 9),
+];
 
+pub fn solve_part_two<'a>(input: impl Iterator<Item = &'a str>) -> String {
     input
         .map(|l| {
             let mut l = l;
             let first = 'l: loop {
-                for (num, val) in numbers_map.iter() {
+                for (num, val) in NUMBERS_MAP.iter() {
                     if l.starts_with(num) {
                         break 'l val;
                     }
@@ -58,7 +58,7 @@ pub fn solve_part_two<'a>(input: impl Iterator<Item = &'a str>) -> String {
             };
 
             let second = 'l: loop {
-                for (num, val) in numbers_map.iter() {
+                for (num, val) in NUMBERS_MAP.iter() {
                     if l.ends_with(num) {
                         break 'l val;
                     }
