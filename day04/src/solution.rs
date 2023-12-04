@@ -17,8 +17,11 @@ const fn recode_char(b: &u8) -> u8 {
 }
 
 pub fn parse<'a>(input: &'a str) -> impl Iterator<Item = usize> + 'a {
-    input.lines().map(|l| {
-        let first = l[9..40]
+    let start = input.find(':').unwrap();
+    let middle = input.find('|').unwrap();
+
+    input.lines().map(move |l| {
+        let first = l[start + 1..middle]
             .as_bytes()
             .iter()
             .map(recode_char)
@@ -26,7 +29,7 @@ pub fn parse<'a>(input: &'a str) -> impl Iterator<Item = usize> + 'a {
             .map(|chunk| chunk[1] * 10 + chunk[2])
             .collect::<Vec<u8>>();
 
-        l[41..]
+        l[middle + 1..]
             .as_bytes()
             .iter()
             .map(recode_char)
