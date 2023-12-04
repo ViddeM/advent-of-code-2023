@@ -1,28 +1,50 @@
-use std::collections::HashMap;
-
 pub fn parse<'a>(input: &'a str) -> impl Iterator<Item = &'a str> + 'a {
     input.lines()
 }
 
+const NUMBERS_MAP_1: [(&str, u32); 9] = [
+    ("1", 1),
+    ("2", 2),
+    ("3", 3),
+    ("4", 4),
+    ("5", 5),
+    ("6", 6),
+    ("7", 7),
+    ("8", 8),
+    ("9", 9),
+];
+
 pub fn solve_part_one<'a>(input: impl Iterator<Item = &'a str>) -> String {
-    let input = input.map(|l| {
-        let nums = l
-            .chars()
-            .filter_map(|c| c.to_digit(10))
-            .collect::<Vec<u32>>();
+    input
+        .map(|l| {
+            let mut l = l;
+            let first = 'l: loop {
+                for (num, val) in NUMBERS_MAP_1.iter() {
+                    if l.starts_with(num) {
+                        break 'l val;
+                    }
+                }
+                // Move pointer one step forward.
+                l = &l[1..];
+            };
 
-        let first = nums.first().unwrap();
+            let second = 'l: loop {
+                for (num, val) in NUMBERS_MAP_1.iter() {
+                    if l.starts_with(num) {
+                        break 'l val;
+                    }
+                }
+                // Move pointer one step back.
+                l = &l[..l.len() - 1];
+            };
 
-        let second = nums.last().unwrap();
-
-        first * 10 + second
-    });
-
-    let sum: u32 = input.sum();
-    sum.to_string()
+            first * 10 + second
+        })
+        .sum::<u32>()
+        .to_string()
 }
 
-const NUMBERS_MAP: [(&str, u32); 18] = [
+const NUMBERS_MAP_2: [(&str, u32); 18] = [
     ("1", 1),
     ("2", 2),
     ("3", 3),
@@ -48,22 +70,22 @@ pub fn solve_part_two<'a>(input: impl Iterator<Item = &'a str>) -> String {
         .map(|l| {
             let mut l = l;
             let first = 'l: loop {
-                for (num, val) in NUMBERS_MAP.iter() {
+                for (num, val) in NUMBERS_MAP_2.iter() {
                     if l.starts_with(num) {
                         break 'l val;
                     }
                 }
-                // Remove first digit
+                // Move pointer one step forward.
                 l = &l[1..];
             };
 
             let second = 'l: loop {
-                for (num, val) in NUMBERS_MAP.iter() {
+                for (num, val) in NUMBERS_MAP_2.iter() {
                     if l.ends_with(num) {
                         break 'l val;
                     }
                 }
-                // Remove last digit
+                // Move pointer one step back.
                 l = &l[..l.len() - 1];
             };
 
