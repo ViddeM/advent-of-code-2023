@@ -1,4 +1,6 @@
 #![feature(test)]
+#![feature(array_chunks)]
+#![feature(iter_array_chunks)]
 
 use generate_aoc_day::generate_day;
 
