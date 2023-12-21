@@ -96,20 +96,55 @@ pub fn solve_part_two<'a>(input: Vec<Vec<char>>) -> String {
         }
 
         last_turn = next_turn.into_iter().collect();
-        if step >= 65 && (step - half_map) % width as usize == 0 {
-            println!("ADDING FOR STEP {step} -- {}", last_turn.len());
+        if step >= half_map && (step - half_map) % width as usize == 0 {
             half_map_vals.push(last_turn.len());
         }
     }
 
-    println!("HALF_MAP_VALS:: {half_map_vals:?}");
-
     assert!(half_map_vals.len() == 3);
-    // let delta = half_map_vals[2] - half_map_vals[1];
-    // vals repeat every 65 + 131 steps,
-    // use this to get a polynomial that can be used to calculate the answer
 
-    // Shamelessly use wolfram alpha to get the answer.
+    let hm = half_map as i128;
+    let hm_vals = half_map_vals
+        .into_iter()
+        .map(|v| v as i128)
+        .collect::<Vec<i128>>();
 
-    format!("Shamelessly use the above values in wolfram alpha to get the answer")
+    find_polynomial_value_at(
+        [
+            (hm, hm_vals[0]),
+            (hm + width, hm_vals[1]),
+            (hm + width * 2, hm_vals[2]),
+        ],
+        26501365,
+    )
+    .to_string()
+}
+
+fn find_polynomial_value_at(points: [(i128, i128); 3], x: i128) -> i128 {
+    let (a, b, c, denominator) = find_coefficients(points);
+
+    let x_sq = x.pow(2);
+    let ax_sq = a * x_sq;
+
+    let bx = b * x;
+
+    let ans_numerator = ax_sq + bx + c;
+    ans_numerator / denominator
+}
+
+fn find_coefficients(points: [(i128, i128); 3]) -> (i128, i128, i128, i128) {
+    let [(x1, y1), (x2, y2), (x3, y3)] = points;
+
+    // Using Cramer's rule to solve the system of linear equations
+    let denominator = -(x1 - x2) * (x1 - x3) * (x2 - x3);
+
+    if denominator == 0 {
+        panic!("Failed to find coefficients!");
+    }
+
+    let a = (y1 * (x2 - x3) + y2 * (x3 - x1) + y3 * (x1 - x2)) * -1;
+    let b = y1 * (x2 + x3) * (x2 - x3) + y2 * (x3 + x1) * (x3 - x1) + y3 * (x1 + x2) * (x1 - x2);
+    let c = (y1 * x2 * x3 * (x2 - x3) + y2 * x3 * x1 * (x3 - x1) + y3 * x1 * x2 * (x1 - x2)) * -1;
+
+    (a, b, c, denominator)
 }

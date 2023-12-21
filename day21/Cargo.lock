@@ -22,6 +22,7 @@ name = "aoc"
 version = "0.1.0"
 dependencies = [
  "generate_aoc_day",
+ "rational",
  "reqwest",
 ]
 
@@ -670,6 +671,12 @@ checksum = "5267fca4496028628a95160fc423a33e8b2e6af8a5302579e322e4b520293cae"
 dependencies = [
  "proc-macro2",
 ]
+
+[[package]]
+name = "rational"
+version = "1.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "04cb5b80a07a398dd9368df8c2e8ae1be87d960a9a64a8c2a2f7996bf7ce4fac"
 
 [[package]]
 name = "redox_syscall"
